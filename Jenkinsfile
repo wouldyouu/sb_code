@@ -5,21 +5,36 @@ pipeline {
         maven 'my_maven'
     }
     environment {
-        GITNAME = 'wouldyou'
-        GITEMAIL = 'jhj5781@gmail.com'
+        GITNAME = 'wouldyou'            
+        GITEMAIL = 'jhj5781a@gmail.com' 
         GITWEBADD = 'https://github.com/wouldyouu/sb_code.git'
-        GITSSHADD = 'git@github.com:wouldyouu/sb_code.git'
-        GITCREDENTIAL = 'git_cre'
-        }
+        GITSSHADD = 'git@github.com:wouldyou/sb_code.git'
+        GITCREDENTIAL = 'git_cre'       
+    }
+        
     stages {
-        stage('Build') {
+        stage('Checkout Github') {
             steps {
-                echo 'Building..'
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [],
+                userRemoteConfigs: [[credentialsId: GITCREDENTIAL, url: GITWEBADD]]])
+            }
+        
+        
+            post {
+        
+                failure {
+                    echo 'Repository clone failure'
+                }
+                success {
+                    echo 'Repository clone success'
+                }
             }
         }
-        stage('Test') {
+        
+        
+        stage('code build') {
             steps {
-                echo 'Testing..'
+                sh 'mvn clean package'
             }
         }
         stage('Deploy') {
@@ -29,3 +44,4 @@ pipeline {
         }
     }
 }
+
