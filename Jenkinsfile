@@ -55,8 +55,8 @@ pipeline {
                 withDockerRegistry(credentialsId: DOCKERHUBCREDENTIAL, url: '') {
                     sh "docker push ${DOCKERHUB}:${currentBuild.number}"
                     sh "docker push ${DOCKERHUB}:latest"
+                }
             }
-        }
             
             post {
                 failure {
@@ -74,6 +74,3 @@ pipeline {
         }
     }
 }
-
-
-
