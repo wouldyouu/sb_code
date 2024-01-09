@@ -10,6 +10,9 @@ pipeline {
         GITWEBADD = 'https://github.com/wouldyouu/sb_code.git'
         GITSSHADD = 'git@github.com:wouldyou/sb_code.git'
         GITCREDENTIAL = 'git_cre'       
+        
+        DOCKERHUB = 'wouldyou/spring'
+        DOCKERHUBCREDENTIAL = 'docker_cre'
     }
         
     stages {
@@ -39,8 +42,27 @@ pipeline {
         }
         stage('image build') {
             steps {
-                sh 'docker build -t wouldyou/spring:2.0 .'
+                sh 'docker build -t {DOCKERHUB}:${currentBuild.number} .'
+                sh 'docker build -t {DOCKERHUB}:latest .'
             }
+        }
+        stage('image PUSH') {
+            steps {
+                sh 'docker push ${DOCKERHUB}:${currentBuild.number}'
+                sh 'docker push ${DOCKERHUB}:latest'
+            }
+            
+            post {
+                failure {
+                    echo 'docker image push failure'
+                    sh 'docker image rm -f ${DOCKERHUB}:${currentBuild.number}'
+                    sh 'docker image rm -f $[DOCKERHUB}:latest'
+                }
+                success {
+                    echo 'docker image push success'
+                    sh 'docker image rm -f ${DOCKERHUB}:${currentBuild.number}'
+                    sh 'docker image rm -f $[DOCKERHUB}:latest'
+                }
         }
     }
 }
