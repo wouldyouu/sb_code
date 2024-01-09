@@ -7,8 +7,8 @@ pipeline {
     environment {
         GITNAME = 'wouldyou'            
         GITEMAIL = 'jhj5781@gmail.com' 
-        GITWEBADD = 'https://github.com/wouldyou/sb_code.git'
-        GITSSHADD = 'git@github.com:wouldyou/sb_code.git'
+        GITWEBADD = 'https://github.com/wouldyouu/sb_code.git'
+        GITSSHADD = 'git@github.com:wouldyouu/sb_code.git'
         GITCREDENTIAL = 'git_cre'
         
         DOCKERHUB = 'wouldyou/spring'
